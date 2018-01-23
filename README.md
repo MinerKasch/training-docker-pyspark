@@ -7,8 +7,8 @@ This docker image allows the development of pyspark through the user of Jupyter.
 The following command starts a container with the Notebook server listening on HTTP connections on port 8888 with a randomly generated authentication token.
 
     docker run -it --rm -p 8888:8888 \
-    -v /some/host/folder/notebooks:/root/notebooks
-    --name=training training \
+    -v /some/host/folder/notebooks:/root/notebooks \
+    --name=training minerkasch/jupyter-pyspark \
     jupyter notebook
 
 To access the notebook server, copy/paste the URL into your browser.
