@@ -4,6 +4,17 @@ This docker image allows the development of pyspark through the user of Jupyter.
 
 ## Basic Use
 
+The docker images can be found in the [Miner Kasch repository](https://hub.docker.com/r/minerkasch/jupyter-pyspark/) on Docker Hub.
+
+### Obtaining the Docker Image
+
+To get the docker image, the following `pull` command can be used.
+
+    docker pull minerkasch/jupyter-pyspark
+
+
+### Running the Image
+
 The following command starts a container with the Notebook server listening on HTTP connections on port 8888 with a randomly generated authentication token.
 
     docker run -it --rm -p 8888:8888 \
@@ -12,6 +23,11 @@ The following command starts a container with the Notebook server listening on H
     jupyter notebook
 
 To access the notebook server, copy/paste the URL into your browser.
+
+
+### Sharing Jupyter Notebooks with the Image
+
+To use notebooks, stored on your local host, with Jupyter on the Docker container, change the sample path (`/some/host/folder/notebooks`) to a directory, on your local host, that contains Jupyter notebook file.
 
 
 ## Using Spark
