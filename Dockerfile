@@ -1,6 +1,4 @@
-# Use alpine as the parent image
-FROM alpine
-
+FROM ubuntu
 
 ################################################################################
 # Set up OS
@@ -9,37 +7,16 @@ FROM alpine
 EXPOSE 8888
 WORKDIR /root
 
-ENV SHELL=/bin/bash
-ENV JAVA_HOME=/usr/lib/jvm/default-jvm
-
-ENTRYPOINT ["/sbin/tini", "--"]
-#CMD ["jupyter-notebook"]
+ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/jre
 
 COPY util/* /usr/local/bin/
 
 RUN \
-  min-apk binutils && \
-  min-apk \
-    bash \
-    musl-dev \
-    gcc \
-    g++ \
-    tini \
-    openjdk8 && \
-  echo "### Cleanup unneeded files" && \
-  rm /bin/bashbug && \
-  rm -rf /usr/include/c++/*/java && \
-  rm -rf /usr/include/c++/*/javax && \
-  rm -rf /usr/include/c++/*/gnu/awt && \
-  rm -rf /usr/include/c++/*/gnu/classpath && \
-  rm -rf /usr/include/c++/*/gnu/gcj && \
-  rm -rf /usr/include/c++/*/gnu/java && \
-  rm -rf /usr/include/c++/*/gnu/javax && \
-  rm /usr/libexec/gcc/x86_64-alpine-linux-musl/*/cc1obj && \
-  rm /usr/bin/gcov* && \
-  rm /usr/bin/gprof && \
-  rm /usr/bin/*gcj
-
+  apt-get update && \
+  apt-get -y install wget \
+    curl \
+    tar \
+    openjdk-8-jre
 
 ################################################################################
 # Python 2
@@ -48,33 +25,40 @@ RUN \
 COPY config/jupyter_notebook_config.py /root/.jupyter/
 
 RUN \
-  min-apk \
-    python \
-    python-dev \
-    py-pip && \
+  apt-get -y install python \
+    python-pip \
+    python-numpy \
+    python-pandas \
+    python-sklearn \
+    python-pycurl \
+    python-matplotlib && \
   pip install --no-cache-dir --upgrade setuptools pip && \
   min-pip jupyter \
-    jupyter_dashboards && \
-  jupyter dashboards quick-setup --sys-prefix && \
+    jupyter_dashboards \
+    tensorflow && \
+#  jupyter dashboards quick-setup --sys-prefix && \
   echo "### Cleanup unneeded files" && \
   rm -rf /usr/lib/python2*/*/tests && \
   rm -rf /usr/lib/python2*/ensurepip && \
   rm -rf /usr/lib/python2*/idlelib && \
-  rm /usr/lib/python2*/distutils/command/*exe && \
   rm -rf /usr/share/man/* && \
   clean-pyc-files /usr/lib/python2*
-
 
 ################################################################################
 # Python 3
 ################################################################################
 
 RUN \
-  min-apk \
-    python3 \
-    python3-dev && \
+  apt-get -y install python3 \
+    python3-pip \
+    python3-numpy \
+    python3-pandas \
+    python3-sklearn \
+    python3-pycurl \
+    python3-matplotlib && \
   pip3 install --no-cache-dir --upgrade setuptools pip && \
-  min-pip3 ipykernel && \
+  min-pip3 ipykernel \
+    tensorflow && \
   python3 -m ipykernel install --user && \
   echo "### Cleanup unneeded files" && \
   rm -rf /usr/lib/python3*/*/tests && \
@@ -93,10 +77,12 @@ ENV HADOOP_VERSION 2.7
 
 RUN \
   cd /tmp && \
-  wget -q http://apache.claz.org/spark/spark-${APACHE_SPARK_VERSION}/spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz && \
+  wget -q http://apache.cs.utah.edu/spark/spark-${APACHE_SPARK_VERSION}/spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz && \
   tar xzf spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz -C /usr/local && \
   rm spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz && \
   cd /usr/local && ln -s spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} spark
 
 ENV SPARK_HOME /usr/local/spark
 ENV PYTHONPATH $SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.4-src.zip
+
+RUN apt-get clean
