@@ -27,7 +27,7 @@ To access the notebook server, copy/paste the URL into your browser.
 
 ### Sharing Jupyter Notebooks with the Image
 
-To use notebooks, stored on your local host, with Jupyter on the Docker container, change the sample path (`/some/host/folder/notebooks`) to a directory, on your local host, that contains Jupyter notebook file.
+To make notebook files on your local host available to the Jupyter server on the Docker container, change the sample path (`/some/host/folder/notebooks`) to a directory, on your local host, that contains Jupyter notebook file.
 
 
 ## Using Spark
