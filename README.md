@@ -58,7 +58,7 @@ An example application looks like the following:
 
 ### Build the docker image
 
-    docker build -t training .
+    docker build -t minerkasch/jupyter-pyspark .
 
 
 ### Run the docker container
@@ -66,7 +66,7 @@ An example application looks like the following:
     docker run -itd --rm -p 8888:8888 \
     -v /some/host/folder/notebooks:/root/notebooks \
     --name=training \
-    training /bin/bash
+    minerkasch/jupyter-pyspark /bin/bash
 
 
 ### List running containers
@@ -76,7 +76,7 @@ An example application looks like the following:
 
 ### Attach to a running container
 
-    docker exec -it training /bin/ash
+    docker exec -it training /bin/bash
 
 
 ### Stop container
@@ -87,4 +87,3 @@ An example application looks like the following:
 ### Remove containers that are exited
 
     docker rm $(docker ps -q -f status="exited")
-
