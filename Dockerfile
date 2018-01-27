@@ -87,3 +87,9 @@ ENV PYTHONPATH $SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.4-src.zip
 ENV PATH $SPARK_HOME/bin:$PATH
 
 RUN apt-get clean
+
+################################################################################
+# Download Titan
+################################################################################
+
+RUN wget -q http://s3.thinkaurelius.com/downloads/titan/titan-1.0.0-hadoop1.zip
